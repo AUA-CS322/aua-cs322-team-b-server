@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_cors import cross_origin
 from flask_jwt_extended import create_access_token
 
 from datetime import timedelta
@@ -12,6 +13,7 @@ user_repository = UserRepository()
 
 
 @account_controller.route('/sign-in', methods=['POST'])
+@cross_origin()
 def login():
     if not request.is_json:
         return jsonify({api_constants.message: api_messages.missing_json}), 400
