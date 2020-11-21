@@ -8,6 +8,7 @@ from src.api import api_constants
 from src.data.user_repository import UserRepository
 
 account_controller = Blueprint('account_controller', __name__)
+user_repository = UserRepository()
 
 
 @account_controller.route('/login', methods=['POST'])
@@ -22,12 +23,11 @@ def login():
     if not password:
         return jsonify({api_constants.message: api_messages.missing_password_parameter}), 400
 
-    repository = UserRepository()
     try:
-        repo_user = repository.get_by_username(username)
+        user = user_repository.get_by_username(username)
     except KeyError:
         return jsonify({api_constants.message: api_messages.bad_username_or_password}), 401
-    if repo_user[api_constants.password] != password:
+    if user[api_constants.password] != password:
         return jsonify({api_constants.message: api_messages.bad_username_or_password}), 401
 
     access_token = create_access_token(identity=username, expires_delta=timedelta(days=1))
