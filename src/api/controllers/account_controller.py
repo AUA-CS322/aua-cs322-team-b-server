@@ -26,9 +26,9 @@ def login():
     try:
         repo_user = repository.get_by_username(username)
     except KeyError:
-        return jsonify({api_constants.message: api_messages.badusernameorpassword}), 401
+        return jsonify({api_constants.message: api_messages.bad_username_or_password}), 401
     if repo_user[api_constants.password] != password:
-        return jsonify({api_constants.message: api_messages.badusernameorpassword}), 401
+        return jsonify({api_constants.message: api_messages.bad_username_or_password}), 401
 
     access_token = create_access_token(identity=username, expires_delta=timedelta(days=1))
     return jsonify(access_token=access_token), 200

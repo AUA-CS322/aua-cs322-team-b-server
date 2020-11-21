@@ -1,5 +1,5 @@
 import json
-import os
+from os import path
 
 
 class UserRepository:
@@ -7,7 +7,8 @@ class UserRepository:
         self._data = []
         self._users = {}
 
-        with open(os.path.join(os.getcwd(), 'data', 'source', 'users.json')) as f:
+        base_dir = path.abspath(path.dirname(__file__))
+        with open(path.join(base_dir, 'source', 'users.json')) as f:
             self._data = json.loads(f.read())
         for val in self._data:
             temp_key = val.pop('username')

@@ -12,7 +12,7 @@ app.register_blueprint(home_controller)
 app.register_blueprint(account_controller)
 app.register_blueprint(users_controller)
 
-app.config['JWT_SECRET_KEY'] = 'C1CF4B7DC4C4153KNJ54E4F55OCA4'
+app.config.from_pyfile('config.py')
 jwt = JWTManager(app)
 
 if __name__ == '__main__':
