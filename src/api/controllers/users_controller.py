@@ -8,6 +8,6 @@ users_controller = Blueprint('users_controller', __name__)
 
 @users_controller.route('/users', methods=['GET'])
 @jwt_required
-def login():
+def get_users():
     ur = UserRepository()
     return ur.get_all()
