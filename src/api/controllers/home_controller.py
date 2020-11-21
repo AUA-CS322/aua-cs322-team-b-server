@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-home_controller = Blueprint('home_controller', __name__)
+home_controller = Blueprint('home_controller', __name__, url_prefix='/api')
 
 
 @home_controller.route('/')
