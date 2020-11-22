@@ -36,11 +36,14 @@ def login():
     try:
         user = user_repository.get_by_username(username)
     except KeyError:
-        return jsonify(
-            {
-                api_constants.success: False,
-                api_constants.message: api_messages.bad_username_or_password
-            }), 200
+        try:
+            user = user_repository.get_by_email(username)
+        except KeyError:
+            return jsonify(
+                {
+                    api_constants.success: False,
+                    api_constants.message: api_messages.bad_username_or_password
+                }), 200
     if user[api_constants.password] != password:
         return jsonify(
             {
