@@ -24,13 +24,13 @@ def login():
         return jsonify(
             {
                 api_constants.success: False,
-                api_constants.message: api_messages.missing_username_parameter
+                api_constants.message: api_messages.missing_username
             }), 400
     if not password:
         return jsonify(
             {
                 api_constants.success: False,
-                api_constants.message: api_messages.missing_password_parameter
+                api_constants.message: api_messages.missing_password
             }), 400
 
     try:
