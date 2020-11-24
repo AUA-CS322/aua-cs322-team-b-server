@@ -19,3 +19,10 @@ class UserRepository:
 
     def get_by_username(self, username):
         return self._users[username]
+
+    def get_by_email(self, email):
+        users = {}
+        for val in self._data:
+            temp_key = val.pop('email')
+            users[temp_key] = val
+        return users[email]
