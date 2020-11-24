@@ -1,0 +1,5 @@
+MESSAGE = 'message'
+SUCCESS = 'success'
+DATA = 'data'
+USERNAME = 'username'
+PASSWORD = 'password'
