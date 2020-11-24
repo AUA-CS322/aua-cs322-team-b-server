@@ -1,4 +1,5 @@
 from flask_restplus import Namespace, Resource
+from flask_cors import cross_origin
 from flask_jwt_extended import jwt_required
 
 from src.api.controllers.api_descriptions import USER_CONTROLLER, STATUS_CODES
@@ -20,7 +21,9 @@ class Users(Resource):
                                      401: STATUS_CODES[401],
                                      403: STATUS_CODES[403]})
     @jwt_required
+    @cross_origin()
     def get(self):
         ur = UserRepository()
 
         return ur.get_all()
+

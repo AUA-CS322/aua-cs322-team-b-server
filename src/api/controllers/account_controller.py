@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_cors import cross_origin
 from flask_jwt_extended import create_access_token
 
 from datetime import timedelta
@@ -7,6 +8,7 @@ from flask import make_response
 from src.api import api_messages
 from src.api import api_constants
 from src.api.controllers.api_descriptions import ACCOUNT_CONTROLLER, STATUS_CODES
+from src.api.managers.account_manager import AccountManager
 from src.data.user_repository import UserRepository
 
 account_controller = Namespace('api')
@@ -20,8 +22,8 @@ SIGN_IN = account_controller.model('Sign In', {'username': fields.String(require
 class SignIn(Resource):
     @account_controller.doc(body=SIGN_IN,
                             responses={200: STATUS_CODES[200],
-                                       400: STATUS_CODES[400]},
-                            )
+                                       400: STATUS_CODES[400]})
+    @cross_origin()
     def post(self):
         if not request.is_json:
             return make_response(jsonify({api_constants.MESSAGE: api_messages.MISSING_JSON}), 400)
@@ -44,12 +46,19 @@ class SignIn(Resource):
         try:
             user = user_repository.get_by_username(username)
         except KeyError:
-            return make_response(jsonify(
+            try:
+                user = user_repository.get_by_email(username)
+            except KeyError:
+                return  make_response(jsonify(
                 {
                     api_constants.SUCCESS: False,
                     api_constants.MESSAGE: api_messages.BAD_USERNAME_OR_PASSWORD
                 }), 200)
-        if user[api_constants.PASSWORD] != password:
+
+        is_password_correct = \
+            AccountManager.is_password_correct(
+                password=password, hashed_password=user[api_constants.PASSWORD])
+        if not is_password_correct:
             return make_response(jsonify(
                 {
                     api_constants.SUCCESS: False,
