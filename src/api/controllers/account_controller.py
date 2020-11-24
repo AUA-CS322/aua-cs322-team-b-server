@@ -1,10 +1,12 @@
 from flask import Blueprint, jsonify, request
+from flask_cors import cross_origin
 from flask_jwt_extended import create_access_token
 
 from datetime import timedelta
 
 from src.api import api_messages
 from src.api import api_constants
+from src.api.managers.account_manager import AccountManager
 from src.data.user_repository import UserRepository
 
 account_controller = Blueprint('account_controller', __name__, url_prefix='/api')
@@ -12,6 +14,7 @@ user_repository = UserRepository()
 
 
 @account_controller.route('/sign-in', methods=['POST'])
+@cross_origin()
 def login():
     if not request.is_json:
         return jsonify({api_constants.MESSAGE: api_messages.MISSING_JSON}), 400
@@ -34,12 +37,19 @@ def login():
     try:
         user = user_repository.get_by_username(username)
     except KeyError:
-        return jsonify(
-            {
-                api_constants.SUCCESS: False,
-                api_constants.MESSAGE: api_messages.BAD_USERNAME_OR_PASSWORD
-            }), 200
-    if user[api_constants.PASSWORD] != password:
+        try:
+            user = user_repository.get_by_email(username)
+        except KeyError:
+            return jsonify(
+                {
+                    api_constants.SUCCESS: False,
+                    api_constants.MESSAGE: api_messages.BAD_USERNAME_OR_PASSWORD
+                }), 200
+
+    is_password_correct =\
+        AccountManager.is_password_correct(
+            password=password, hashed_password=user[api_constants.PASSWORD])
+    if not is_password_correct:
         return jsonify(
             {
                 api_constants.SUCCESS: False,
