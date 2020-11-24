@@ -1,10 +1,12 @@
 from flask import Blueprint, jsonify, request
+from flask_cors import cross_origin
 from flask_jwt_extended import create_access_token
 
 from datetime import timedelta
 
 from src.api import api_messages
 from src.api import api_constants
+from src.api.managers.account_manager import AccountManager
 from src.data.user_repository import UserRepository
 
 account_controller = Blueprint('account_controller', __name__, url_prefix='/api')
@@ -12,6 +14,7 @@ user_repository = UserRepository()
 
 
 @account_controller.route('/sign-in', methods=['POST'])
+@cross_origin()
 def login():
     if not request.is_json:
         return jsonify({api_constants.message: api_messages.missing_json}), 400
@@ -22,24 +25,31 @@ def login():
         return jsonify(
             {
                 api_constants.success: False,
-                api_constants.message: api_messages.missing_username_parameter
+                api_constants.message: api_messages.missing_username
             }), 400
     if not password:
         return jsonify(
             {
                 api_constants.success: False,
-                api_constants.message: api_messages.missing_password_parameter
+                api_constants.message: api_messages.missing_password
             }), 400
 
     try:
         user = user_repository.get_by_username(username)
     except KeyError:
-        return jsonify(
-            {
-                api_constants.success: False,
-                api_constants.message: api_messages.bad_username_or_password
-            }), 200
-    if user[api_constants.password] != password:
+        try:
+            user = user_repository.get_by_email(username)
+        except KeyError:
+            return jsonify(
+                {
+                    api_constants.success: False,
+                    api_constants.message: api_messages.bad_username_or_password
+                }), 200
+
+    is_password_correct =\
+        AccountManager.is_password_correct(
+            password=password, hashed_password=user[api_constants.password])
+    if not is_password_correct:
         return jsonify(
             {
                 api_constants.success: False,
