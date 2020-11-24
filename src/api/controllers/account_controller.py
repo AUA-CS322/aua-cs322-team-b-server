@@ -6,6 +6,7 @@ from datetime import timedelta
 
 from src.api import api_messages
 from src.api import api_constants
+from src.api.managers.account_manager import AccountManager
 from src.data.user_repository import UserRepository
 
 account_controller = Blueprint('account_controller', __name__, url_prefix='/api')
@@ -44,7 +45,11 @@ def login():
                     api_constants.success: False,
                     api_constants.message: api_messages.bad_username_or_password
                 }), 200
-    if user[api_constants.password] != password:
+
+    is_password_correct =\
+        AccountManager.is_password_correct(
+            password=password, hashed_password=user[api_constants.password])
+    if not is_password_correct:
         return jsonify(
             {
                 api_constants.success: False,
