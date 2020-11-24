@@ -17,21 +17,21 @@ user_repository = UserRepository()
 @cross_origin()
 def login():
     if not request.is_json:
-        return jsonify({api_constants.message: api_messages.missing_json}), 400
+        return jsonify({api_constants.MESSAGE: api_messages.MISSING_JSON}), 400
 
-    username = request.json.get(api_constants.username, None)
-    password = request.json.get(api_constants.password, None)
+    username = request.json.get(api_constants.USERNAME)
+    password = request.json.get(api_constants.PASSWORD)
     if not username:
         return jsonify(
             {
-                api_constants.success: False,
-                api_constants.message: api_messages.missing_username
+                api_constants.SUCCESS: False,
+                api_constants.MESSAGE: api_messages.MISSING_USERNAME
             }), 400
     if not password:
         return jsonify(
             {
-                api_constants.success: False,
-                api_constants.message: api_messages.missing_password
+                api_constants.SUCCESS: False,
+                api_constants.MESSAGE: api_messages.MISSING_PASSWORD
             }), 400
 
     try:
@@ -42,23 +42,23 @@ def login():
         except KeyError:
             return jsonify(
                 {
-                    api_constants.success: False,
-                    api_constants.message: api_messages.bad_username_or_password
+                    api_constants.SUCCESS: False,
+                    api_constants.MESSAGE: api_messages.BAD_USERNAME_OR_PASSWORD
                 }), 200
 
     is_password_correct =\
         AccountManager.is_password_correct(
-            password=password, hashed_password=user[api_constants.password])
+            password=password, hashed_password=user[api_constants.PASSWORD])
     if not is_password_correct:
         return jsonify(
             {
-                api_constants.success: False,
-                api_constants.message: api_messages.bad_username_or_password
+                api_constants.SUCCESS: False,
+                api_constants.MESSAGE: api_messages.BAD_USERNAME_OR_PASSWORD
             }), 200
 
     access_token = create_access_token(identity=username, expires_delta=timedelta(days=1))
     return jsonify(
         {
-            api_constants.success: True,
-            api_constants.data: access_token
+            api_constants.SUCCESS: True,
+            api_constants.DATA: access_token
         }), 200
