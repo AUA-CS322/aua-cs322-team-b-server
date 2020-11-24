@@ -1,4 +1,4 @@
-missing_json = 'Missing JSON in request'
-missing_username = 'Missing username parameter'
-missing_password = 'Missing password parameter'
-bad_username_or_password = 'Incorrect username and/or password'
+MISSING_JSON = 'Missing JSON in request'
+MISSING_USERNAME = 'Missing username parameter'
+MISSING_PASSWORD = 'Missing password parameter'
+BAD_USERNAME_OR_PASSWORD = 'Incorrect username and/or password'
