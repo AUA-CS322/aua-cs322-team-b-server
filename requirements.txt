@@ -2,6 +2,9 @@ Flask==1.1.2
 Flask-SQLAlchemy==2.4.4
 Flask-JWT-Extended==3.25.0
 python-dotenv==0.15.0
+flask-restplus==0.13.0
+Werkzeug==0.16.1
 gevent==20.9.0
 Flask-Cors==3.0.9
 bcrypt==3.2.0
+
