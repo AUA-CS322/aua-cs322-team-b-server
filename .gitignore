@@ -7,3 +7,4 @@ __pycache__/
 
 # Virtual Environment
 env/
+.backend_linter_history
