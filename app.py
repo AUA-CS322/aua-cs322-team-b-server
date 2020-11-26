@@ -17,7 +17,7 @@ api = Api(app)
 api.add_namespace(account_controller)
 api.add_namespace(users_controller)
 
-app.config.from_pyfile('config.py')
+app.config.from_pyfile('src/config.py')
 jwt = JWTManager(app)
 
 if __name__ == '__main__':
