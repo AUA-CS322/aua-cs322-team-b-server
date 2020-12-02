@@ -12,4 +12,4 @@ ADD app.py /app
 
 EXPOSE 8000
 
-CMD ["python", "app.py", "8000"]
+CMD ["python", "app.py", "${PORT}"]
