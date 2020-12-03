@@ -45,4 +45,4 @@ class UsersSearch(Resource):
                     value.append(user)
         response[value] = value
         # We can use flask.jsonify instead of a response
-        return response
+        # return flask.json(success=True, data=)
