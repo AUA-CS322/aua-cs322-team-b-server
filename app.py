@@ -1,7 +1,9 @@
 import argparse
 from flask import Flask
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from flask_restplus import Api
+from flask_cors import CORS
 
 from src.utils.logger.logger import make_logger
 from src.api.controllers.account_controller import account_controller
@@ -13,11 +15,12 @@ app = Flask(__name__)
 log = make_logger(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 api = Api(app)
+CORS(app)
 
 api.add_namespace(account_controller)
 api.add_namespace(users_controller)
 
-app.config.from_pyfile('config.py')
+app.config.from_pyfile('src/config.py')
 jwt = JWTManager(app)
 
 if __name__ == '__main__':

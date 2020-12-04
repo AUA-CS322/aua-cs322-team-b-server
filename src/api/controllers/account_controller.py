@@ -1,10 +1,9 @@
-from flask import jsonify, request
+from datetime import timedelta
+from flask import jsonify, request, make_response
 from flask_cors import cross_origin
 from flask_jwt_extended import create_access_token
 
-from datetime import timedelta
 from flask_restplus import Namespace, Resource, fields
-from flask import make_response
 from src.api import api_messages
 from src.api import api_constants
 from src.api.controllers.api_descriptions import ACCOUNT_CONTROLLER, STATUS_CODES
@@ -49,8 +48,7 @@ class SignIn(Resource):
             try:
                 user = user_repository.get_by_email(username)
             except KeyError:
-                return  make_response(jsonify(
-                {
+                return  make_response(jsonify({
                     api_constants.SUCCESS: False,
                     api_constants.MESSAGE: api_messages.BAD_USERNAME_OR_PASSWORD
                 }), 200)

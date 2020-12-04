@@ -1,0 +1,13 @@
+{
+  "backend-sdk": {
+    "whitelisted-extensions": [
+      ".py",
+      ".txt"
+    ],
+    "targets": [
+      "api/",
+      "utils/",
+      "data/"
+    ]
+  }
+}
