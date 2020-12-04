@@ -1,6 +1,7 @@
 import argparse
 from flask import Flask
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from flask_restplus import Api
 from flask_cors import CORS
 

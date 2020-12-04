@@ -12,13 +12,13 @@ def find_the_match(string, query):
 
 def normalize_user(user):
     response = {}
-    response['id'] = user['id']
+    response['value'] = user['id']
     value = ''
     for keyword in ACCEPTED_KEYWORDS_FOR_SEARCH:
         value += user[keyword]
         if keyword != ACCEPTED_KEYWORDS_FOR_SEARCH[-1]:
             value += ', '
-    response['value'] = value
+    response['label'] = value
     return response
 
 
