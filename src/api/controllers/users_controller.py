@@ -48,3 +48,4 @@ class UsersSearch(Resource):
                     values.append(user)
 
         return jsonify(success=True, data=values)
+
