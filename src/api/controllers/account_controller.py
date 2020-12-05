@@ -48,8 +48,7 @@ class SignIn(Resource):
             try:
                 user = user_repository.get_by_email(username)
             except KeyError:
-                return  make_response(jsonify(
-                {
+                return  make_response(jsonify({
                     api_constants.SUCCESS: False,
                     api_constants.MESSAGE: api_messages.BAD_USERNAME_OR_PASSWORD
                 }), 200)

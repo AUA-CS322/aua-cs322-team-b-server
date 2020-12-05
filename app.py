@@ -1,12 +1,14 @@
 import argparse
 from flask import Flask
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from flask_restplus import Api
 from flask_cors import CORS
 
 from src.utils.logger.logger import make_logger
 from src.api.controllers.account_controller import account_controller
 from src.api.controllers.users_controller import users_controller
+from src.api.controllers.users_chart_controller import users_chart_controller
 from gevent.pywsgi import WSGIServer
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -18,6 +20,7 @@ CORS(app)
 
 api.add_namespace(account_controller)
 api.add_namespace(users_controller)
+api.add_namespace(users_chart_controller)
 
 app.config.from_pyfile('src/config.py')
 jwt = JWTManager(app)
