@@ -6,6 +6,7 @@ from src.api.controllers.api_descriptions import USER_CONTROLLER, STATUS_CODES, 
     USER_CHART_ORGANIZATION
 from src.api.controllers.search import get_required_fields_by_keyword, ACCEPTED_KEYWORDS_FOR_SEARCH
 from src.data.user_repository import UserRepository
+from src.api.controllers.search import get_required_fields_by_keyword, ACCEPTED_KEYWORDS_FOR_SEARCH
 
 authorizations = {'apikey':
                       {'type': 'apiKey',
@@ -21,6 +22,7 @@ responses = {
 
 users_controller = Namespace('api', default='AUA Organization Users', authorizations=authorizations, security='apikey')
 
+
 @users_controller.route('/users', methods=['GET'], doc={'description': USER_CONTROLLER})
 class Users(Resource):
 
@@ -29,6 +31,7 @@ class Users(Resource):
     @cross_origin()
     def get(self):
         user_repository = UserRepository()
+
 
         return jsonify(success=True, data=user_repository.get_all())
 
@@ -46,6 +49,5 @@ class UsersSearch(Resource):
             for user in matched_users_list:
                 if user not in values:
                     values.append(user)
-
         return jsonify(success=True, data=values)
-
+      
