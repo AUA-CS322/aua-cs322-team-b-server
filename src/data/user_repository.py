@@ -3,6 +3,8 @@ from os import path
 
 
 class UserRepository:
+    __slots__ = '_data', '_users'
+
     def __init__(self):
         self._data = []
         self._users = {}
@@ -14,15 +16,30 @@ class UserRepository:
             temp_key = val.pop('username')
             self._users[temp_key] = val
 
+
     def get_all(self):
         return self._users
 
     def get_by_username(self, username):
-        return self._users[username]
+        try:
+            return self._users[username]
+        except KeyError:
+            return None
 
     def get_by_email(self, email):
         users = {}
-        for val in self._data:
-            temp_key = val.pop('email')
-            users[temp_key] = val
-        return users[email]
+        try:
+            for val in self._data:
+                temp_key = val.pop('email')
+                users[temp_key] = val
+            return users[email]
+        except KeyError:
+            return None
+
+    def get_by_id(self, id):
+        try:
+            for username, user in self._users.items():
+                if user['id'] == id:
+                    return user
+        except KeyError:
+            return None
