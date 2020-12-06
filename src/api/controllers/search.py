@@ -4,8 +4,8 @@ ACCEPTED_KEYWORDS_FOR_SEARCH = ['firstName', 'lastName', 'email', 'position', 'd
 MINIMUM_NUMBER_OF_CHARACTERS_USED_FOR_SEARCH = 3
 
 def find_the_match(string, query):
-    string = string.capitalize()
-    query = query.capitalize()
+    string = string.lower()
+    query = query.lower()
     if string.startswith(query) or string.endswith(query) or string.find(query) != -1:
         return True
     return False
