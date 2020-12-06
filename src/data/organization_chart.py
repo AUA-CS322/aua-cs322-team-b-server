@@ -4,20 +4,19 @@ from os import path
 from src.data.user_repository import UserRepository
 
 class OrganizationChart:
-    __slots__ = '_chart'
+    __slots__ = '_chart', '_user_repository'
 
     def __init__(self):
         base_dir = path.abspath(path.dirname(__file__))
         with open(path.join(base_dir, 'source', 'org-tree.json')) as f:
             self._chart = json.loads(f.read())
+            self._user_repository = UserRepository()
 
     def _normalize(self):
-        user_repository = UserRepository()
         chart_nodes_list = []
         is_first_node = True
         for user_info in self._chart:
-            user = user_repository.get_by_id(user_info['id'])
-            parent_user = user_repository.get_by_id(user_info['parent'])
+            user, parent_user = self.get_user_with_parent(user_info)
             if user is None or parent_user is None:
                 raise Exception('The id provided does not exist in data.')
             chart_node = {}
@@ -34,4 +33,23 @@ class OrganizationChart:
         return chart_nodes_list
 
     def get_chart(self):
-        return self._normalize()
+        return self._normalize() 
+
+    def find_user_info_by_id(self, id):
+        for user_info in self._chart:
+            if user_info['id'] == id:
+                return user_info            
+
+    def get_user_with_manager(self, id):
+        user_info = self.find_user_info_by_id(id)                    
+        return self.get_user_with_parent(id, user_info)        
+
+    def get_user_with_parent(self, user_id, user_info):
+
+        user = self._user_repository.get_by_id(user_id)
+        parent_user = None    
+
+        if user_info is not None:  
+            parent_user = self._user_repository.get_by_id(user_info['parent'])
+
+        return user, parent_user        
