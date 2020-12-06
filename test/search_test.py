@@ -8,19 +8,19 @@ from src.data.user_repository import UserRepository
 class TestFindMatchMethod(unittest.TestCase):
 
 
-    def test_find_the_match_beginning(self):
+    def test_find_the_match_should_match_with_valid_prefix(self):
         is_Matched = find_the_match("FirstName", "first")
         self.assertTrue(is_Matched)
 
-    def test_find_the_match_end(self):
+    def test_find_the_match_should_match_with_valid_suffix(self):
         is_Matched = find_the_match("FirstName", "name")
         self.assertTrue(is_Matched)  
 
-    def test_contains_the_match(self):
+    def test_find_the_match_should_match_with_valid_substring(self):
         is_Matched = find_the_match("Yerevan, Armenia", "Armenia")
         self.assertTrue(is_Matched)
 
-    def test_does_not_contain_the_match(self):
+    def test_find_the_match_should_not_match_with_invalid_string(self):
         is_Matched = find_the_match("FirstName", "invalid")
         self.assertFalse(is_Matched)          
 
@@ -28,7 +28,7 @@ class TestFindMatchMethod(unittest.TestCase):
 class TestNormalizeUser(unittest.TestCase):
 
 
-    def test_normalize_user_success(self):
+    def test_normalize_user_returns_formmated_data_with_valid_user(self):
         user = {
             "id": "caf54384-0fc3-44a4-a3ec-ca250b10dc40",
             "email": "test@aua.am",
@@ -46,10 +46,10 @@ class TestNormalizeUser(unittest.TestCase):
         self.assertEquals(user['id'], response['value'])
         self.assertEquals('Test1, Test1, test@aua.am, Test-Test 1, Test, Yerevan, Armenia', response['label'])
 
-    def test_normalize_user_empty_user(self):
+    def test_normalize_user_raises_error_with_empty_user(self):
         self.assertRaises(KeyError, normalize_user, {})
 
-    def test_normalize_user_missing_key(self):
+    def test_normalize_raises_error_with_missing_user_id(self):
         user = {
             "email": "test@aua.am",
             "username": "test1",
@@ -67,18 +67,18 @@ class TestNormalizeUser(unittest.TestCase):
 class TestGetRequiredFieldsMethod(unittest.TestCase):
 
 
-    def test_get_required_fields_min_length_exception(self):
+    def test_get_required_fields_raises_error_with_invalid_len(self):
         self.assertRaises(Exception, get_required_fields_by_keyword, 'firstName', 'ab')        
     
-    def test_get_required_no_accepted_keyword_exception(self):
+    def test_get_required_raises_error_on_non_accepted_keyword(self):
         self.assertRaises(Exception, get_required_fields_by_keyword, 'NotAcceptedWord', 'fName1')
 
-    # In case of real data sources UserRepositry should be mocked.
-    def test_get_required_accepted_keyword_not_found(self):
+    # In case of real data source UserRepositry should be mocked.
+    def test_get_required_raises_error_when_query_value_not_found(self):
         users = get_required_fields_by_keyword("firstName", "notExistingName")
         self.assertFalse(users)
     
-    def test_get_required_accepted_keyword_success(self):
+    def test_get_required_accepted_returns_users_with_valid_keyword_(self):
         users = get_required_fields_by_keyword("firstName", "FName5")
         self.assertTrue(users)    
 
