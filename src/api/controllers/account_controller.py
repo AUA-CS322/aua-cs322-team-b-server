@@ -30,9 +30,9 @@ class SignIn(Resource):
         username = request.json.get(api_constants.USERNAME)
         password = request.json.get(api_constants.PASSWORD)
 
-        error_message = SignIn.validate_user(username,password)
-        if error_message is None:
-            access_token = create_access_token(identity=username, expires_delta=timedelta(days=1))
+        message = SignIn.validate_user(username, password)
+        if message[0] is None:
+            access_token = create_access_token(identity=message[1][api_constants.ID], expires_delta=timedelta(days=1))
             return make_response(jsonify(
                 {
                     api_constants.SUCCESS: True,
@@ -42,8 +42,8 @@ class SignIn(Resource):
         return make_response(jsonify(
                 {
                     api_constants.SUCCESS: False,
-                    api_constants.MESSAGE: error_message[1]
-                }), error_message[0])
+                    api_constants.MESSAGE: message[1]
+                }), message[0])
 
     def validate_user(username, password):
         if not username:
@@ -72,4 +72,4 @@ class SignIn(Resource):
         if not is_password_correct:
             return (200, api_messages.BAD_USERNAME_OR_PASSWORD)
 
-        return None
+        return (None, user)
