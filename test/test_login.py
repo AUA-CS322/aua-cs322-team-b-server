@@ -7,11 +7,11 @@ class TestLogin(unittest.TestCase):
 
     def test_if_correct(self):
         value = SignIn.validate_user("president", "president")
-        self.assertEqual(value,None)
+        self.assertEqual(value[0], None)
 
     def test_if_correct_email(self):
         value = SignIn.validate_user("president@aua.am", "president")
-        self.assertEqual(value,None)
+        self.assertEqual(value[0], None)
 
     def test_if_incorrect_username(self):
         value = SignIn.validate_user("pasdsfp", "president")

@@ -4,7 +4,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restplus import Namespace, Resource
 from src.api.controllers.api_descriptions import USER_CONTROLLER, STATUS_CODES, USER_SEARCH_CONTROLLER, \
     USER_GET_BY_ID_CONTROLLER
-from src.api.controllers.search import get_required_fields_by_keyword, ACCEPTED_KEYWORDS_FOR_SEARCH
 from src.data.user_repository import UserRepository
 from src.api.controllers.search import get_required_fields_by_keyword, ACCEPTED_KEYWORDS_FOR_SEARCH
 from src.data.organization_chart import OrganizationChart
@@ -36,7 +35,7 @@ class Users(Resource):
     @jwt_required
     @cross_origin()
     def get(self):
-        user = user_repository.get_by_username(get_jwt_identity())
+        user = user_repository.get_by_id(get_jwt_identity())
         user_id = user[api_constants.ID]
         user, parent = OrganizationChart().get_user_with_manager(user_id)
 
