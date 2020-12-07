@@ -9,22 +9,23 @@ class OrganizationChart:
     def __init__(self):
         base_dir = path.abspath(path.dirname(__file__))
         with open(path.join(base_dir, 'source', 'org-tree.json')) as f:
-            self._chart = json.loads(f.read())
+            self._chart = list(json.loads(f.read()))
 
     def _normalize(self):
         user_repository = UserRepository()
         chart_nodes_list = []
-        is_first_node = True
+        # The parent of the first element of _chart is assumed to be the root
+        root_node_id = self._chart[0]['parent']
+        self._chart.insert(0, {'id': root_node_id, 'parent': None})
         for user_info in self._chart:
             user = user_repository.get_by_id(user_info['id'])
             parent_user = user_repository.get_by_id(user_info['parent'])
-            if user is None or parent_user is None:
+            if user is None:
                 raise Exception('The id provided does not exist in data.')
             chart_node = {}
             chart_node['nodeId'] = user['id']
-            if is_first_node:
+            if parent_user is None:
                 chart_node['parentNodeId'] = None
-                is_first_node = False
             else:
                 chart_node['parentNodeId'] = parent_user['id']
             chart_node['fullName'] = '{}, {}'.format(user['firstName'], user['lastName'])
