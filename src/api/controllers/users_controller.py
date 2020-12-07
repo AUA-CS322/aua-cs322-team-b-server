@@ -54,7 +54,7 @@ class Users(Resource):
             }), 200)
 
 
-@users_controller.route('/users/info/<string:user_id>', methods=['GET'], doc={'description': USER_GET_BY_ID_CONTROLLER})
+@users_controller.route('/users/<string:user_id>', methods=['GET'], doc={'description': USER_GET_BY_ID_CONTROLLER})
 class Users(Resource):
 
     @users_controller.doc(params={'user_id': 'The User Id for retrieval.'}, security='apikey', responses=responses)
