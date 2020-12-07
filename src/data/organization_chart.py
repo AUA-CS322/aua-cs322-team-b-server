@@ -3,6 +3,7 @@ from os import path
 
 from src.data.user_repository import UserRepository
 
+
 class OrganizationChart:
     __slots__ = '_chart', '_user_repository'
 

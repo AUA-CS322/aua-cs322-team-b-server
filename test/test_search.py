@@ -1,12 +1,8 @@
-from src.api.controllers.search import (find_the_match, normalize_user, get_required_fields_by_keyword, 
-ACCEPTED_KEYWORDS_FOR_SEARCH, MINIMUM_NUMBER_OF_CHARACTERS_USED_FOR_SEARCH)
-
+from src.api.controllers.search import find_the_match, normalize_user, get_required_fields_by_keyword
 import unittest
-from unittest.mock import MagicMock, patch
-from src.data.user_repository import UserRepository
+
 
 class TestFindMatchMethod(unittest.TestCase):
-
 
     def test_find_the_match_should_match_with_valid_prefix(self):
         is_Matched = find_the_match("FirstName", "first")
@@ -27,7 +23,6 @@ class TestFindMatchMethod(unittest.TestCase):
 
 class TestNormalizeUser(unittest.TestCase):
 
-
     def test_normalize_user_returns_formmated_data_with_valid_user(self):
         user = {
             "id": "caf54384-0fc3-44a4-a3ec-ca250b10dc40",
@@ -43,8 +38,8 @@ class TestNormalizeUser(unittest.TestCase):
             "photoUrl": "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairTheCaesarSidePart&accessoriesType=Wayfarers&hairColor=Platinum&facialHairType=MoustacheMagnum&facialHairColor=BlondeGolden&clotheType=ShirtVNeck&clotheColor=Blue01&graphicType=Cumbia&eyeType=Surprised&eyebrowType=Default&mouthType=Sad&skinColor=Tanned"
         }
         response = normalize_user(user)
-        self.assertEquals(user['id'], response['value'])
-        self.assertEquals('Test1, Test1, test@aua.am, Test-Test 1, Test, Yerevan, Armenia', response['label'])
+        self.assertEqual(user['id'], response['value'])
+        self.assertEqual('Test1, Test1, test@aua.am, Test-Test 1, Test, Yerevan, Armenia', response['label'])
 
     def test_normalize_user_raises_error_with_empty_user(self):
         self.assertRaises(KeyError, normalize_user, {})
@@ -64,8 +59,8 @@ class TestNormalizeUser(unittest.TestCase):
         }
         self.assertRaises(KeyError, normalize_user, user)       
 
-class TestGetRequiredFieldsMethod(unittest.TestCase):
 
+class TestGetRequiredFieldsMethod(unittest.TestCase):
 
     def test_get_required_fields_raises_error_with_invalid_len(self):
         self.assertRaises(Exception, get_required_fields_by_keyword, 'firstName', 'ab')        
@@ -82,6 +77,6 @@ class TestGetRequiredFieldsMethod(unittest.TestCase):
         users = get_required_fields_by_keyword("firstName", "FName5")
         self.assertTrue(users)    
 
+
 if __name__ == '__main__':
     unittest.main()
-    
