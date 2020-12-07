@@ -14,16 +14,17 @@ class OrganizationChart:
 
     def _normalize(self):
         chart_nodes_list = []
-        is_first_node = True
+        # The parent of the first element of _chart is assumed to be the root
+        root_node_id = self._chart[0]['parent']
+        self._chart.insert(0, {'id': root_node_id, 'parent': None})
         for user_info in self._chart:
             user, parent_user = self.get_user_with_parent(user_info)
-            if user is None or parent_user is None:
+            if user is None:
                 raise Exception('The id provided does not exist in data.')
             chart_node = {}
             chart_node['nodeId'] = user['id']
-            if is_first_node:
+            if parent_user is None:
                 chart_node['parentNodeId'] = None
-                is_first_node = False
             else:
                 chart_node['parentNodeId'] = parent_user['id']
             chart_node['fullName'] = '{}, {}'.format(user['firstName'], user['lastName'])
@@ -45,7 +46,6 @@ class OrganizationChart:
         return self.get_user_with_parent(id, user_info)        
 
     def get_user_with_parent(self, user_id, user_info):
-
         user = self._user_repository.get_by_id(user_id)
         parent_user = None    
 
