@@ -13,7 +13,7 @@ class UserRepository:
         with open(path.join(base_dir, 'source', 'users.json')) as f:
             self._data = json.loads(f.read())
         for val in self._data:
-            temp_key = val.pop('username')
+            temp_key = val.get('username')
             self._users[temp_key] = val
 
 
@@ -30,7 +30,7 @@ class UserRepository:
         users = {}
         try:
             for val in self._data:
-                temp_key = val.pop('email')
+                temp_key = val.get('email')
                 users[temp_key] = val
             return users[email]
         except KeyError:
