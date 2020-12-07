@@ -21,6 +21,8 @@ users_chart_controller = Namespace('api',
                                    default='AUA Organization Chart',
                                    authorizations=authorizations,
                                    security='apikey')
+
+
 @users_chart_controller.route('/users/chart', methods=['GET'], doc={'description': USER_CHART_ORGANIZATION})
 class OrganizationChartTree(Resource):
 

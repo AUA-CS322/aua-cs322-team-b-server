@@ -1,12 +1,8 @@
-from src.api.controllers.search import (find_the_match, normalize_user, get_required_fields_by_keyword, 
-ACCEPTED_KEYWORDS_FOR_SEARCH, MINIMUM_NUMBER_OF_CHARACTERS_USED_FOR_SEARCH)
-
+from src.api.controllers.search import find_the_match, normalize_user, get_required_fields_by_keyword
 import unittest
-from unittest.mock import MagicMock, patch
-from src.data.user_repository import UserRepository
+
 
 class TestFindMatchMethod(unittest.TestCase):
-
 
     def test_find_the_match_should_match_with_valid_prefix(self):
         is_Matched = find_the_match("FirstName", "first")
@@ -26,7 +22,6 @@ class TestFindMatchMethod(unittest.TestCase):
 
 
 class TestNormalizeUser(unittest.TestCase):
-
 
     def test_normalize_user_returns_formmated_data_with_valid_user(self):
         user = {
@@ -64,8 +59,8 @@ class TestNormalizeUser(unittest.TestCase):
         }
         self.assertRaises(KeyError, normalize_user, user)       
 
-class TestGetRequiredFieldsMethod(unittest.TestCase):
 
+class TestGetRequiredFieldsMethod(unittest.TestCase):
 
     def test_get_required_fields_raises_error_with_invalid_len(self):
         self.assertRaises(Exception, get_required_fields_by_keyword, 'firstName', 'ab')        
@@ -82,6 +77,6 @@ class TestGetRequiredFieldsMethod(unittest.TestCase):
         users = get_required_fields_by_keyword("firstName", "FName5")
         self.assertTrue(users)    
 
+
 if __name__ == '__main__':
     unittest.main()
-    
