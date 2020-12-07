@@ -38,8 +38,8 @@ class TestNormalizeUser(unittest.TestCase):
             "photoUrl": "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairTheCaesarSidePart&accessoriesType=Wayfarers&hairColor=Platinum&facialHairType=MoustacheMagnum&facialHairColor=BlondeGolden&clotheType=ShirtVNeck&clotheColor=Blue01&graphicType=Cumbia&eyeType=Surprised&eyebrowType=Default&mouthType=Sad&skinColor=Tanned"
         }
         response = normalize_user(user)
-        self.assertEquals(user['id'], response['value'])
-        self.assertEquals('Test1, Test1, test@aua.am, Test-Test 1, Test, Yerevan, Armenia', response['label'])
+        self.assertEqual(user['id'], response['value'])
+        self.assertEqual('Test1, Test1, test@aua.am, Test-Test 1, Test, Yerevan, Armenia', response['label'])
 
     def test_normalize_user_raises_error_with_empty_user(self):
         self.assertRaises(KeyError, normalize_user, {})

@@ -29,43 +29,47 @@ class SignIn(Resource):
 
         username = request.json.get(api_constants.USERNAME)
         password = request.json.get(api_constants.PASSWORD)
+
+        error_message = SignIn.validate_user(username,password)
+        if error_message is None:
+            access_token = create_access_token(identity=username, expires_delta=timedelta(days=1))
+            return make_response(jsonify(
+                {
+                    api_constants.SUCCESS: True,
+                    api_constants.DATA: access_token
+                }), 200)
+
+        return make_response(jsonify(
+                {
+                    api_constants.SUCCESS: False,
+                    api_constants.MESSAGE: error_message[1]
+                }), error_message[0])
+
+    def validate_user(username, password):
         if not username:
-            return make_response(jsonify(
-                {
-                    api_constants.SUCCESS: False,
-                    api_constants.MESSAGE: api_messages.MISSING_USERNAME
-                }), 400)
+            return (400,api_messages.MISSING_USERNAME)
         if not password:
-            return make_response(jsonify(
-                {
-                    api_constants.SUCCESS: False,
-                    api_constants.MESSAGE: api_messages.MISSING_PASSWORD
-                }), 400)
+            return (400,api_messages.MISSING_PASSWORD)
 
         try:
             user = user_repository.get_by_username(username)
         except KeyError:
+            pass
+        if user is None:
             try:
                 user = user_repository.get_by_email(username)
             except KeyError:
-                return  make_response(jsonify({
+                return make_response(jsonify({
                     api_constants.SUCCESS: False,
                     api_constants.MESSAGE: api_messages.BAD_USERNAME_OR_PASSWORD
                 }), 200)
+        if user is None:
+            return (200, api_messages.BAD_USERNAME_OR_PASSWORD)
 
         is_password_correct = \
             AccountManager.is_password_correct(
                 password=password, hashed_password=user[api_constants.PASSWORD])
         if not is_password_correct:
-            return make_response(jsonify(
-                {
-                    api_constants.SUCCESS: False,
-                    api_constants.MESSAGE: api_messages.BAD_USERNAME_OR_PASSWORD
-                }), 200)
+            return (200, api_messages.BAD_USERNAME_OR_PASSWORD)
 
-        access_token = create_access_token(identity=username, expires_delta=timedelta(days=1))
-        return make_response(jsonify(
-            {
-                api_constants.SUCCESS: True,
-                api_constants.DATA: access_token
-            }), 200)
+        return None
